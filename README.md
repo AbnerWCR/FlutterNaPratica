@@ -1,2 +1,2 @@
 # FlutterNaPratica
-Repositório de estudo de flutter com auxílios dos conteúdos de GabulDev
+Repositório de estudo de Flutter3 com auxílios dos conteúdos de GabulDev
