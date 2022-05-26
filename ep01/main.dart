@@ -9,8 +9,6 @@
 // const - define um valor imutável (em tempo de compilação);
 
 void main() {
-  var listReminderDynamic = [];
-  List listReminderType;
-  final listRemiderFinal = [];
+  var stickyNotes = <String>[];
 
 }
