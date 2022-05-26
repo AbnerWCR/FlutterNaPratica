@@ -8,7 +8,19 @@
 // final - define um valor imutável (em tempo de execução);
 // const - define um valor imutável (em tempo de compilação);
 
-void main() {
-  var stickyNotes = <String>[];
+final stickyNotes = <String>[];
 
+void main() {
+  print(stickyNotes);
+
+  stickyNotes.add("today I watch the first ep");
+  print(stickyNotes);
+
+  stickyNotes.remove("today I watch the first ep");
+  print(stickyNotes);
 }
+
+void addStickyNotes(String reminder) {
+  stickyNotes.add(reminder);
+}
+
