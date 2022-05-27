@@ -13,14 +13,17 @@ final stickyNotes = <String>[];
 void main() {
   print(stickyNotes);
 
-  stickyNotes.add("today I watch the first ep");
-  print(stickyNotes);
-
-  stickyNotes.remove("today I watch the first ep");
+  addReminder("EP 01");
+  removeReminder("EP 01");
+  
   print(stickyNotes);
 }
 
-void addStickyNotes(String reminder) {
+void addReminder(String reminder) {
   stickyNotes.add(reminder);
+}
+
+void removeReminder(String reminder) {
+  stickyNotes.remove(reminder);
 }
 
