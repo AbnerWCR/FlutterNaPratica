@@ -1,5 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:login_firebase/modules/login/login_controller.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -9,60 +9,10 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  String? username;
-  String? password;
-  bool isLoading = false;
-  final formKey = GlobalKey<FormState>();
-
-  String? validateUsername(String? username) =>
-      username != null && username.isNotEmpty ? null : "username can't be null";
-
-  String? validatePassword(String? password) =>
-      password != null && password.length >= 6
-          ? null
-          : "password must be 6 characters";
-
-  void login({required String username, required String password}) async {
-    isLoading = true;
-
-    setState(() {});
-
-    final response = await apiLogin(username: username, password: password);
-    isLoading = false;
-
-    setState(() {});
-
-    if (response) {
-      // ignore: use_build_context_synchronously
-      Navigator.pushNamed(context, "/home");
-    }
-  }
-
-  Future<bool> apiLogin(
-      {required String username, required String password}) async {
-    final response = await FirebaseAuth.instance.signInWithEmailAndPassword(email: username, password: password);
-
-    return true;
-  }
-
-  bool validate() {
-    final form = formKey.currentState!;
-
-    if (form.validate()) {
-      form.save();
-
-      return true;
-    }
-
-    return false;
-  }
-
-  bool stringIsNullOrEmpty(String? value) {
-    if (value == null || value.isEmpty) {
-      return true;
-    }
-    return false;
-  }
+  late final controller = LoginController(
+    onSuccessLogin: (() => Navigator.pushNamed(context, "/home")),
+    onUpdate: (() => setState(() {}))
+    );
 
   @override
   Widget build(BuildContext context) {
@@ -71,25 +21,25 @@ class _LoginPageState extends State<LoginPage> {
             body: Padding(
               padding: EdgeInsets.symmetric(horizontal: 32),
               child: Form(
-                key: formKey,
+                key: controller.formKey,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     TextFormField(
                       decoration: InputDecoration(labelText: "Username"),
-                      validator: (value) => validateUsername(value),
-                      onSaved: (value) => username = value,
+                      validator: (value) => controller.validateUsername(value),
+                      onSaved: (value) => controller.username = value,
                     ),
                     TextFormField(
                       decoration: InputDecoration(labelText: "Password"),
-                      validator: (value) => validatePassword(value),
-                      onSaved: (value) => password = value,
+                      validator: (value) => controller.validatePassword(value),
+                      onSaved: (value) => controller.password = value,
                       obscureText: true,
                     ),
                     SizedBox(
                       height: 20,
                     ),
-                    if (isLoading)
+                    if (controller.isLoading)
                       CircularProgressIndicator()
                     else
                       TextButton(
@@ -98,8 +48,8 @@ class _LoginPageState extends State<LoginPage> {
                                 MaterialStateProperty.all(Colors.deepPurple),
                           ),
                           onPressed: () {
-                            if (validate()) {
-                              login(username: username!, password: password!);
+                            if (controller.validate()) {
+                              controller.login();
                             }
                           },
                           child: Text(
