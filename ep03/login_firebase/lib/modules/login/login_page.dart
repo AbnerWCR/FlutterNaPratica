@@ -39,7 +39,12 @@ class _LoginPageState extends State<LoginPage> {
                     SizedBox(
                       height: 20,
                     ),
-                    if (controller.isLoading)
+                    if (controller.error != null)
+                      Text(
+                        controller.error!,
+                        style: TextStyle(color: Colors.red),
+                      )
+                    else if (controller.isLoading)
                       CircularProgressIndicator()
                     else
                       TextButton(
