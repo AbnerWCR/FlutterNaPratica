@@ -1,6 +1,8 @@
-import 'package:flutter/material.dart' hide Action;
-import 'package:mobx/mobx.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mobx/mobx.dart';
+
+import 'controller.dart';
 
 void main() {
   runApp(const MyApp());
@@ -32,27 +34,41 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final controller = Controller();
+  ReactionDisposer? disposer;
+
+  @override
+  void initState() {
+    disposer = autorun((_) {
+      if (controller.count % 2 == 0) {
+        controller.plus();
+      }
+    });
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    disposer?.call();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Observer(builder: (_) => Text(
+          "Plus: ${controller.count2}"
+        ),)
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+      body: Observer(
+        builder: (context) => ListView.builder(
+          itemCount: controller.count,
+          itemBuilder: (_, index) => Card(
+            child: ListTile(
+              title: Text("Index $index"),
             ),
-            Observer(
-              builder: (context) => Text(
-                '${controller.count}',
-                style: Theme.of(context).textTheme.headline4,
-              ),
-            )
-          ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
