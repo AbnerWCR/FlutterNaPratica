@@ -31,13 +31,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final _counter = Observable(0);
-
-  late final incrementCounter = Action(_incrementCounter);
-
-  void _incrementCounter() {
-    _counter.value++;
-  }
+  final controller = Controller();
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Observer(
               builder: (context) => Text(
-                '${_counter.value}',
+                '${controller.count}',
                 style: Theme.of(context).textTheme.headline4,
               ),
             )
@@ -63,7 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          incrementCounter.call();
+          controller.increment();
         },
         tooltip: 'Increment',
         child: const Icon(Icons.add),
