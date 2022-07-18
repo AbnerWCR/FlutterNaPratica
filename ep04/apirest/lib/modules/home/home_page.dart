@@ -12,6 +12,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<dynamic> posts = [];
+  List<dynamic> photos = [];
 
   final client = Dio(
     BaseOptions(baseUrl: "https://jsonplaceholder.typicode.com/"),
@@ -21,9 +22,14 @@ class _HomePageState extends State<HomePage> {
     final response = await client.get("/posts");
     posts = response.data;
 
-    setState(() {
-      
-    });
+    setState(() {});
+  }
+
+  Future<void> _photos() async {
+    final response = await client.get("/photos");
+    photos = response.data;
+
+    setState(() {});
   }
 
   @override
@@ -33,19 +39,21 @@ class _HomePageState extends State<HomePage> {
         title: Text(widget.title),
       ),
       body: ListView.builder(
-        itemCount: posts.length,
+        itemCount: photos.length,
         itemBuilder: (_, index) => Card(
-          child: ListTile(
-            title: Text(posts[index]['title']),
+          
+          child: Image(image: NetworkImage(photos[index]["url"]),
+            
           ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          await _getPosts();
+          //await _getPosts();
+          await _photos();
         },
         tooltip: '',
-        child: const Icon(Icons.get_app_outlined),
+        child: const Icon(Icons.photo_camera_back_outlined),
       ),
     );
   }
